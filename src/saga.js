@@ -1,7 +1,7 @@
 import { call, put, takeLatest, all } from 'redux-saga/effects';
-import { updatePlayers } from './action';
+import { updatePlayers } from './redux/action';
 import request from './request';
-import { ADD_PLAYER, PLAYERS_LIST } from './type';
+import { ADD_PLAYER, PLAYERS_LIST } from './redux/type';
 
 export function* loadPlayerList(data) {
   const requestURL = `http://localhost:5000/players`;
@@ -19,13 +19,12 @@ export function* loadPlayerList(data) {
 }
 
 export function* addPlayerToDb(req) {
-  console.log('in addPlayerToDb func', req)
   const requestURL = `http://localhost:5000/add`;
   const options = {
     method: 'POST',
     body: req.payload,
   };
-  const response = yield call(request, requestURL, options);
+  yield call(request, requestURL, options);
 }
 
 export default function* playerWatch() {

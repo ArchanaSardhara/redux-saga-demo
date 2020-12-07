@@ -1,14 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga';
+
+import reportWebVitals from './reportWebVitals';
 import Routing from './route';
-import reducer from './reducer';
-import mySaga from './saga';
+import reducer from './redux/reducer';
+import sagaWatcher from './saga';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./css/main.css";
@@ -16,16 +15,12 @@ import "./css/main.css";
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const sagaMiddleware = createSagaMiddleware();
 
-const combineReducer = combineReducers({
-  players: reducer,
-})
-
 let store = createStore(
-  combineReducer,
+  reducer,
   composeEnhancer(applyMiddleware(sagaMiddleware)),
 );
 
-sagaMiddleware.run(mySaga)
+sagaMiddleware.run(sagaWatcher)
 
 
 ReactDOM.render(

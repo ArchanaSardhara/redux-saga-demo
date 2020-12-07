@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { addPlayer } from '../action';
+import { addPlayer } from '../redux/action';
 
 const initData = {
   first_name: "",

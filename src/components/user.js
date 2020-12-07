@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Button } from "react-bootstrap";
 
-import { loadPlayers } from '../action';
+import { loadPlayers } from '../redux/action';
 
 const Users = (props) => {
   const [rendered, setRendered] = useState(false);
