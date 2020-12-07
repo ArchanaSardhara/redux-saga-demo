@@ -1,7 +1,7 @@
 import { call, put, takeLatest, all } from 'redux-saga/effects';
-import { updatePlayers } from './redux/action';
-import request from './request';
-import { ADD_PLAYER, PLAYERS_LIST } from './redux/type';
+import { updatePlayers } from './action';
+import request from '../request';
+import { ADD_PLAYER, PLAYERS_LIST } from './type';
 
 export function* loadPlayerList(data) {
   const requestURL = `http://localhost:5000/players`;

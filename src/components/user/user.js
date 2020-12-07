@@ -2,23 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Button } from "react-bootstrap";
 
-import { loadPlayers } from '../redux/action';
+import { loadPlayers } from '../../redux/action';
+import AddUser from './add-user';
 
-const Users = (props) => {
+const Users = ({
+  player,
+  onLoadPlayers
+}) => {
   const [rendered, setRendered] = useState(false);
   const [userList, setUserList] = useState([]);
+  const [addPlayerModal, toogleAddPlayerModal] = useState(false);
 
   useEffect(() => {
     if (!rendered) {
-      props.onLoadPlayers(setUserList);
+      onLoadPlayers(setUserList);
       setRendered(true);
     }
-  }, [props.player]);
+  }, [onLoadPlayers, player, rendered]);
 
   const toggleToAddPlayer = () => {
-    props.history.push("add-user")
+    toogleAddPlayerModal(prevFlag => !prevFlag);
   }
-  console.log('userList >>>', userList)
 
   return <div>
     <Button type="button" className="float-right mr-2 mb-2" onClick={() => toggleToAddPlayer()}>New Player</Button>
@@ -53,6 +57,7 @@ const Users = (props) => {
         ))}
       </tbody>
     </table>
+    <AddUser isOpen={addPlayerModal} toggleModal={toogleAddPlayerModal} />
   </div>
 }
 

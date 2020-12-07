@@ -1,34 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware, compose } from 'redux';
-import createSagaMiddleware from 'redux-saga';
 
 import reportWebVitals from './reportWebVitals';
-import Routing from './route';
-import reducer from './redux/reducer';
-import sagaWatcher from './saga';
+import App from './App';
+import store from './configureStore'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./css/main.css";
 
-const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const sagaMiddleware = createSagaMiddleware();
-
-let store = createStore(
-  reducer,
-  composeEnhancer(applyMiddleware(sagaMiddleware)),
-);
-
-sagaMiddleware.run(sagaWatcher)
-
-
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <Routing />
-    </Provider>,
-  </React.StrictMode>,
+  <Provider store={store}>
+    <App />
+  </Provider>,
   document.getElementById('root')
 );
 
