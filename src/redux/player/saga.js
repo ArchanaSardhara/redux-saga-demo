@@ -34,8 +34,13 @@ export function* updatePlayerToDb(req) {
     method: 'POST',
     body: req.payload,
   };
-  yield call(request, requestURL, options);
-  yield put(loadPlayers());
+  try {
+    yield call(request, requestURL, options);
+    yield put(loadPlayers());
+  }
+  catch (e) {
+    console.error("Error::", e)
+  }
 }
 
 

@@ -22,7 +22,6 @@ const Users = ({
   }, [onLoadPlayers, rendered]);
 
   const toggleToAddPlayer = () => {
-    console.log('addPlayerModal', addPlayerModal)
     if (addPlayerModal) {
       setPlayer(null);
     }
@@ -35,7 +34,6 @@ const Users = ({
   }
 
   const deletePlayer = (player) => {
-    console.log('delete plyaer', player)
     if (window.confirm('Are you sure you want to delete user: ' + player.user_name + ' ?')) {
       onDeletePlayer(player.id);
     }

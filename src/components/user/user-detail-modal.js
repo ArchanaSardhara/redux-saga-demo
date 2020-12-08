@@ -24,7 +24,6 @@ const UserDetail = ({
   const [player, setPlayer] = useState({ ...initData });
 
   useEffect(() => {
-    console.log('isEdit', isEdit)
     if (isEdit && data) {
       const image_name = 'http://localhost:5000/assets/img/' + data.image;
       setPlayer({
