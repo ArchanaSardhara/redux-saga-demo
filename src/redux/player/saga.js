@@ -1,7 +1,7 @@
 import { call, put, takeLatest, all } from 'redux-saga/effects';
-import { updatePlayers } from './action';
+import { updatePlayers, loadPlayers } from './action';
 import request from '../request';
-import { ADD_PLAYER, PLAYERS_LIST } from './type';
+import { ADD_PLAYER, DELETE_PLAYER, PLAYERS_LIST, UPDATE_PLAYER } from './type';
 
 export function* loadPlayerList(data) {
   const requestURL = `http://localhost:5000/players`;
@@ -25,7 +25,33 @@ export function* addPlayerToDb(req) {
     body: req.payload,
   };
   yield call(request, requestURL, options);
+  yield put(loadPlayers());
 }
+
+export function* updatePlayerToDb(req) {
+  const requestURL = `http://localhost:5000/edit/${req.id}`;
+  const options = {
+    method: 'POST',
+    body: req.payload,
+  };
+  yield call(request, requestURL, options);
+  yield put(loadPlayers());
+}
+
+
+export function* deletePlayerToDb(req) {
+  const requestURL = `http://localhost:5000/delete/${req.id}`;
+  const options = {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json, application/xml, text/plain, text/html, *.*',
+    },
+  };
+  yield call(request, requestURL, options);
+  yield put(loadPlayers());
+}
+
+
 
 export default function* playerWatch() {
   // Watches for PLAYERS_LIST actions and calls getRepos when one comes in.
@@ -35,5 +61,7 @@ export default function* playerWatch() {
   yield all([
     takeLatest(PLAYERS_LIST, loadPlayerList),
     takeLatest(ADD_PLAYER, addPlayerToDb),
+    takeLatest(UPDATE_PLAYER, updatePlayerToDb),
+    takeLatest(DELETE_PLAYER, deletePlayerToDb),
   ]);
 }

@@ -1,6 +1,10 @@
-import { ADD_PLAYER, PLAYERS_LIST, UPDATE_PLAYERS_LIST } from "./type"
+import { ADD_PLAYER, DELETE_PLAYER, PLAYERS_LIST, UPDATE_PLAYER, UPDATE_PLAYERS_LIST } from "./type";
 
-export const loadPlayers = (setter) => {
+const setterFn = (data) => {
+  return data;
+}
+
+export const loadPlayers = (setter = setterFn) => {
   return {
     type: PLAYERS_LIST,
     setter
@@ -18,5 +22,20 @@ export const addPlayer = (payload) => {
   return {
     type: ADD_PLAYER,
     payload
+  }
+}
+
+export const updatePlayer = (payload, id) => {
+  return {
+    type: UPDATE_PLAYER,
+    payload,
+    id
+  }
+}
+
+export const deletePlayer = (id) => {
+  return {
+    type: DELETE_PLAYER,
+    id
   }
 }

@@ -2,26 +2,43 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Button } from "react-bootstrap";
 
-import { loadPlayers } from '../../redux/action';
-import AddUser from './add-user';
+import { deletePlayer, loadPlayers } from '../../redux/action';
+import UserDetail from './user-detail-modal';
 
 const Users = ({
-  player,
-  onLoadPlayers
+  playerList = [],
+  onLoadPlayers,
+  onDeletePlayer
 }) => {
   const [rendered, setRendered] = useState(false);
-  const [userList, setUserList] = useState([]);
   const [addPlayerModal, toogleAddPlayerModal] = useState(false);
+  const [player, setPlayer] = useState(null);
 
   useEffect(() => {
     if (!rendered) {
-      onLoadPlayers(setUserList);
+      onLoadPlayers();
       setRendered(true);
     }
-  }, [onLoadPlayers, player, rendered]);
+  }, [onLoadPlayers, rendered]);
 
   const toggleToAddPlayer = () => {
+    console.log('addPlayerModal', addPlayerModal)
+    if (addPlayerModal) {
+      setPlayer(null);
+    }
     toogleAddPlayerModal(prevFlag => !prevFlag);
+  }
+
+  const editPlayer = (player) => {
+    setPlayer(player);
+    toggleToAddPlayer();
+  }
+
+  const deletePlayer = (player) => {
+    console.log('delete plyaer', player)
+    if (window.confirm('Are you sure you want to delete user: ' + player.user_name + ' ?')) {
+      onDeletePlayer(player.id);
+    }
   }
 
   return <div>
@@ -40,7 +57,7 @@ const Users = ({
         </tr>
       </thead>
       <tbody>
-        {(userList || []).map((player, index) => (
+        {playerList.map((player, index) => (
           <tr key={index}>
             <th scope="row">{player.id}</th>
             <td><img src={`http://localhost:5000/assets/img/${player.image}`} className="rounded-circle player-img" alt="" /></td>
@@ -50,14 +67,15 @@ const Users = ({
             <td>{player.number}</td>
             <td>@{player.user_name}</td>
             <td>
-              <a href="/edit/{player.id}" target="_blank" rel="noopener" className="btn btn-sm btn-success">Edit</a>
-              <a href="/delete/{player.id}" className="btn btn-sm btn-danger">Delete</a>
+
+              <Button type="button" variant="success" className="mr-2 mb-2" onClick={() => editPlayer(player)}>Edit</Button>
+              <Button type="button" variant="danger" className="mr-2 mb-2" onClick={() => deletePlayer(player)}>Delete</Button>
             </td>
           </tr>
         ))}
       </tbody>
     </table>
-    <AddUser isOpen={addPlayerModal} toggleModal={toogleAddPlayerModal} />
+    <UserDetail isOpen={addPlayerModal} toggleModal={toggleToAddPlayer} isEdit={player && player.id ? true : false} data={player} />
   </div>
 }
 
@@ -68,7 +86,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
   return {
-    onLoadPlayers: (a) => dispatch(loadPlayers(a))
+    onLoadPlayers: () => dispatch(loadPlayers()),
+    onDeletePlayer: (id) => dispatch(deletePlayer(id))
   }
 }
 
